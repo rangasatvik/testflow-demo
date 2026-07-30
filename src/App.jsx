@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
   BookOpenCheck,
   CalendarClock,
   CheckCircle2,
   ClipboardCheck,
+  ClipboardList,
   FileCheck2,
   Download,
   FileText,
@@ -95,6 +96,21 @@ const BEST_PRACTICES = [
   "Keep backups isolated from normal user accounts and test restores before an emergency.",
   "Document incident roles, severity levels, customer notice triggers, and legal contacts.",
   "Review vendor access and data sharing at renewal time and when business owners change.",
+];
+
+const REMEDIATION_STEPS = [
+  {
+    title: "Confirm ownership",
+    description: "Assign a control owner and due date for every open item in the weakest domain.",
+  },
+  {
+    title: "Train affected teams",
+    description: "Send the matching basic module before rolling out a new policy or workflow.",
+  },
+  {
+    title: "Document evidence",
+    description: "Capture screenshots, ticket links, and renewal notes so progress is auditable.",
+  },
 ];
 
 const CAPABILITY_CARDS = [
@@ -354,6 +370,26 @@ function App() {
                 </ul>
               </article>
             ))}
+          </div>
+          <div className="remediation-panel">
+            <div className="section-heading compact">
+              <ClipboardList size={20} />
+              <div>
+                <h2>Action plan</h2>
+                <p>Turn the score into a first sprint of measurable security work.</p>
+              </div>
+            </div>
+            <ol className="remediation-list">
+              {REMEDIATION_STEPS.map((step, index) => (
+                <li key={step.title}>
+                  <span>{index + 1}</span>
+                  <div>
+                    <h3>{step.title}</h3>
+                    <p>{step.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
         </aside>
       </section>
