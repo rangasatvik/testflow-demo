@@ -59,6 +59,13 @@ requires an ESP/sending domain and a real prospect list, neither of which
 exist in this repo yet — see `gtm/README.md` for what's needed to go from
 templates to actual sends.
 
+## Competitive positioning
+
+See [`docs/competitive-risk-mitigation.md`](./docs/competitive-risk-mitigation.md)
+for the strategy behind how Testflow is positioned against full GRC
+platforms (Vanta, Drata, Secureframe) and the rest of the competition in the
+cybersecurity-assessment space.
+
 ## Deployment
 
 See `infra/aws/README.md` for the suggested AWS architecture and the

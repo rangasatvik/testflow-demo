@@ -14,6 +14,10 @@ script worth handing to a rep.
   script, objection handling, and the demo-to-close flow.
 - [`prospect-tracker.csv`](./prospect-tracker.csv) — template for logging
   prospects and outreach status; import into a spreadsheet or CRM.
+- [`../docs/competitive-risk-mitigation.md`](../docs/competitive-risk-mitigation.md)
+  — positioning strategy against Vanta/Drata/Secureframe and the rest of the
+  cybersecurity-assessment competitive set; keep the objection-handling
+  section in `founder-led-sales-playbook.md` in sync with it.
 
 ## What's already wired up in the product
 
