@@ -5,10 +5,12 @@ import {
   CalendarClock,
   CheckCircle2,
   ClipboardCheck,
+  FileCheck2,
   Download,
   FileText,
   GraduationCap,
   LockKeyhole,
+  Radar,
   RotateCcw,
   ShieldCheck,
   ShieldQuestion,
@@ -93,6 +95,30 @@ const BEST_PRACTICES = [
   "Keep backups isolated from normal user accounts and test restores before an emergency.",
   "Document incident roles, severity levels, customer notice triggers, and legal contacts.",
   "Review vendor access and data sharing at renewal time and when business owners change.",
+];
+
+const CAPABILITY_CARDS = [
+  {
+    icon: Radar,
+    title: "Automated security assessment",
+    description:
+      "Convert lightweight control answers into a live readiness score, ranked gaps, and an exportable JSON action report.",
+    metric: "4 domains",
+  },
+  {
+    icon: GraduationCap,
+    title: "Basic cybersecurity training",
+    description:
+      "Map the top risks to focused modules for phishing, MFA, data handling, and first-response basics.",
+    metric: "55 min",
+  },
+  {
+    icon: FileCheck2,
+    title: "Best-practices documentation",
+    description:
+      "Give teams starter policy language for access, endpoints, data protection, vendors, and incident readiness.",
+    metric: "6 guides",
+  },
 ];
 
 function initialAnswers() {
@@ -204,12 +230,13 @@ function App() {
         <div className="hero-copy">
           <div className="eyebrow">
             <ShieldCheck size={18} />
-            Security readiness MVP
+            Automated security assessment tool
           </div>
-          <h1>Automated security assessment workspace</h1>
+          <h1>Security readiness without heavyweight GRC overhead</h1>
           <p>
-            Run a practical baseline check, identify the highest-risk gaps, assign starter
-            training, and export a lightweight action report.
+            Testflow helps small teams run a practical baseline assessment, identify the
+            highest-risk gaps, assign starter training, and document the security practices
+            customers expect to see.
           </p>
           <div className="hero-actions">
             <button className="primary-button" onClick={downloadReport}>
@@ -224,6 +251,11 @@ function App() {
               <RotateCcw size={18} />
             </button>
           </div>
+          <div className="proof-row" aria-label="Landing page highlights">
+            <span>Live scoring</span>
+            <span>Role-based lessons</span>
+            <span>Policy-ready guidance</span>
+          </div>
         </div>
         <div className="score-panel" aria-label="Security readiness score">
           <div className="score-ring" style={{ "--score": `${result.score}%` }}>
@@ -236,12 +268,27 @@ function App() {
         </div>
       </section>
 
+      <section className="capability-band" aria-label="Security platform capabilities">
+        {CAPABILITY_CARDS.map(({ icon: Icon, title, description, metric }) => (
+          <article className="capability-card" key={title}>
+            <div className="capability-icon">
+              <Icon size={22} />
+            </div>
+            <div>
+              <span>{metric}</span>
+              <h2>{title}</h2>
+              <p>{description}</p>
+            </div>
+          </article>
+        ))}
+      </section>
+
       <section className="dashboard-grid" aria-label="Security assessment dashboard">
         <div className="assessment-panel">
           <div className="section-heading">
             <ClipboardCheck size={22} />
             <div>
-              <h2>Assessment</h2>
+              <h2>Automated assessment</h2>
               <p>Answer each control to calculate readiness and prioritize remediation.</p>
             </div>
           </div>
@@ -315,7 +362,7 @@ function App() {
         <div className="section-heading">
           <GraduationCap size={22} />
           <div>
-            <h2>Training modules</h2>
+            <h2>Basic cybersecurity training modules</h2>
             <p>Starter curriculum for broad security awareness and role-specific response.</p>
           </div>
         </div>
