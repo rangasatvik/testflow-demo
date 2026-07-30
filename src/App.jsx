@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
   BookOpenCheck,
+  CalendarClock,
   CheckCircle2,
   ClipboardCheck,
   Download,
@@ -11,7 +12,9 @@ import {
   RotateCcw,
   ShieldCheck,
   ShieldQuestion,
+  X,
 } from "lucide-react";
+import { trackEvent } from "./analytics.js";
 
 const ASSESSMENT_AREAS = [
   {
@@ -110,6 +113,28 @@ function App() {
       return initialAnswers();
     }
   });
+  const [isDemoModalOpen, setDemoModalOpen] = useState(false);
+  const [demoRequestSent, setDemoRequestSent] = useState(false);
+
+  useEffect(() => {
+    trackEvent("website_visit", { path: window.location.pathname });
+  }, []);
+
+  function submitDemoRequest(event) {
+    event.preventDefault();
+    const form = new FormData(event.target);
+    trackEvent("demo_request", {
+      name: form.get("name"),
+      email: form.get("email"),
+      company: form.get("company"),
+    });
+    setDemoRequestSent(true);
+  }
+
+  function closeDemoModal() {
+    setDemoModalOpen(false);
+    setDemoRequestSent(false);
+  }
 
   const result = useMemo(() => {
     const values = Object.values(answers);
@@ -190,6 +215,10 @@ function App() {
             <button className="primary-button" onClick={downloadReport}>
               <Download size={18} />
               Export report
+            </button>
+            <button className="secondary-button" onClick={() => setDemoModalOpen(true)}>
+              <CalendarClock size={18} />
+              Request a demo
             </button>
             <button className="icon-button" onClick={resetAssessment} aria-label="Reset assessment">
               <RotateCcw size={18} />
@@ -338,6 +367,49 @@ function App() {
           </ol>
         </div>
       </section>
+
+      {isDemoModalOpen && (
+        <div className="modal-overlay" role="presentation" onClick={closeDemoModal}>
+          <div
+            className="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Request a demo"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button className="icon-button modal-close" onClick={closeDemoModal} aria-label="Close">
+              <X size={18} />
+            </button>
+            {demoRequestSent ? (
+              <div className="modal-confirmation">
+                <CheckCircle2 size={28} />
+                <h3>Thanks — we'll be in touch</h3>
+                <p>A team member will reach out to schedule your demo.</p>
+              </div>
+            ) : (
+              <form onSubmit={submitDemoRequest}>
+                <h3>Request a demo</h3>
+                <p>Tell us where to reach you and we'll set up time to walk through the platform.</p>
+                <label>
+                  Name
+                  <input name="name" type="text" required />
+                </label>
+                <label>
+                  Work email
+                  <input name="email" type="email" required />
+                </label>
+                <label>
+                  Company
+                  <input name="company" type="text" />
+                </label>
+                <button className="primary-button" type="submit">
+                  Send request
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
