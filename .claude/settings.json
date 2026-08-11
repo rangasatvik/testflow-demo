@@ -1,0 +1,33 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,sys,re;d=json.load(sys.stdin);cmd=d.get('tool_input',{}).get('command','');BLOCKED=[r'git\\s+push\\s+.*--force',r'git\\s+push\\s+[^\\s]+\\s+[^\\s]+:(main|master|production|release)',r'git\\s+reset\\s+--hard',r'git\\s+commit\\s+.*--no-verify',r'git\\s+checkout\\s+--\\s*\\.',r'git\\s+clean\\s+-\\S*f',r'git\\s+branch\\s+-D',r'--gpg-sign=false',r'commit\\.gpgsign=false',];found=[p for p in BLOCKED if re.search(p,cmd)];[print('[runner-safety] BLOCKED: '+p,file=sys.stderr) for p in found];sys.exit(2 if found else 0)\""
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,sys,re;d=json.load(sys.stdin);fp=d.get('tool_input',{}).get('file_path','');blocked=bool(re.search(r'(^|/)\\.env',fp));print('[runner-safety] BLOCKED .env write: '+fp,file=sys.stderr) if blocked else None;sys.exit(2 if blocked else 0)\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,sys,re;d=json.load(sys.stdin);fp=d.get('tool_input',{}).get('file_path','');blocked=bool(re.search(r'(^|/)\\.env',fp));print('[runner-safety] BLOCKED .env write: '+fp,file=sys.stderr) if blocked else None;sys.exit(2 if blocked else 0)\""
+          }
+        ]
+      }
+    ]
+  }
+}
