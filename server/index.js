@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import express from "express";
 import cors from "cors";
 import { getPool } from "./db.js";
-import { ALLOWED_EVENTS, TRACKING_PIXEL, recordEvent } from "./analytics.js";
+import { ALLOWED_EVENTS, TRACKING_PIXEL, recordEvent, getEventCounts } from "./analytics.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, "..", "dist");
@@ -41,6 +41,20 @@ app.post("/api/analytics/events", async (req, res) => {
       properties && typeof properties === "object" ? properties : {},
     );
     res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ status: "error", message: err.message });
+  }
+});
+
+app.get("/api/analytics/summary", async (_req, res) => {
+  try {
+    const counts = await getEventCounts(getPool());
+    res.json({
+      website_visits: counts.website_visit,
+      demo_requests: counts.demo_request,
+      email_opens: counts.email_open,
+      customers_onboarded: counts.customer_onboarded,
+    });
   } catch (err) {
     res.status(500).json({ status: "error", message: err.message });
   }
