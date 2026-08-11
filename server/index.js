@@ -60,6 +60,38 @@ app.get("/api/analytics/pixel.gif", async (req, res) => {
   res.send(TRACKING_PIXEL);
 });
 
+// Analytics summary for the founder GTM review — returns rolling 30-day event
+// counts grouped by event type and, for email_open, by campaign slug.
+app.get("/api/analytics/summary", async (_req, res) => {
+  try {
+    const pool = getPool();
+    const [totals, campaigns] = await Promise.all([
+      pool.query(
+        `SELECT event_name, COUNT(*) AS count
+           FROM analytics_events
+          WHERE occurred_at >= now() - interval '30 days'
+          GROUP BY event_name
+          ORDER BY count DESC`,
+      ),
+      pool.query(
+        `SELECT properties->>'campaign' AS campaign, COUNT(*) AS count
+           FROM analytics_events
+          WHERE event_name = 'email_open'
+            AND occurred_at >= now() - interval '30 days'
+          GROUP BY campaign
+          ORDER BY count DESC`,
+      ),
+    ]);
+    res.json({
+      window: "30d",
+      totals: totals.rows,
+      email_opens_by_campaign: campaigns.rows,
+    });
+  } catch (err) {
+    res.status(500).json({ status: "error", message: err.message });
+  }
+});
+
 app.use(express.static(distDir));
 
 app.get("*", (_req, res) => {

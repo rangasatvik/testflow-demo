@@ -10,8 +10,19 @@ script worth handing to a rep.
 - [`cold-email-sequence.md`](./cold-email-sequence.md) — 3-touch cold email
   sequence (initial + 2 follow-ups), with the `email_open` tracking pixel
   wired into every template.
+- [`cold-email-sequences/`](./cold-email-sequences/) — per-email files with
+  full body, subject-line A/B variants, personalisation variables, and do/don'ts.
+- [`linkedin-outreach.md`](./linkedin-outreach.md) — connection request, DM
+  follow-up, warm-intro request, and inbound-lead scripts.
+- [`reply-handling.md`](./reply-handling.md) — exact response copy for every
+  reply type: interested, not-now, wrong-person, competitor-user, price ask,
+  and unsubscribe.
+- [`post-demo-followup.md`](./post-demo-followup.md) — follow-up email to send
+  within 2 hours of a demo call, plus the lightweight one-page proposal format.
 - [`founder-led-sales-playbook.md`](./founder-led-sales-playbook.md) — call
   script, objection handling, and the demo-to-close flow.
+- [`launch-checklist.md`](./launch-checklist.md) — pre-launch requirements and
+  the weekly outreach cadence checklist.
 - [`prospect-tracker.csv`](./prospect-tracker.csv) — template for logging
   prospects and outreach status; import into a spreadsheet or CRM.
 
@@ -23,6 +34,10 @@ script worth handing to a rep.
   event. The cold email templates in this folder embed it as
   `<img src="https://<deployed-host>/api/analytics/pixel.gif?campaign=cold-01">`
   — swap `<deployed-host>` for the real deployment domain before sending.
+- `GET /api/analytics/summary` returns a rolling 30-day JSON summary of event
+  counts by type and `email_open` counts by campaign slug — use this in the
+  weekly founder review (see `launch-checklist.md`) to see which touches are
+  driving demo requests.
 - Reply-to on every template should be the founder's inbox — this is a
   founder-led motion, not a shared sales alias.
 
